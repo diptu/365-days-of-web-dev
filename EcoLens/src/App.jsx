@@ -1,17 +1,16 @@
-// import './App.css'
+import Card from './components/Card'
 
 function App() {
  
-const todos = ['Practice React','Practice Next','Create Projects','Practice ML']
   return (
     <>
-      <h2>Todo</h2>
-        <ul>
-          <li>{todos[0]}</li>
-          <li>{todos[1]}</li>
-          <li>{todos[2]}</li>
-          <li>{todos[3]}</li>
-        </ul>
+    <div className="cards">
+    <Card title="Practice React" description="Props and destructuring"/>
+    <Card title="Improve English" description="practice GRE, ILTES, TYPING"/>
+
+ 
+    </div>
+   
     </>
   )
 }
