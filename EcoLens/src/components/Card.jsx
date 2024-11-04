@@ -1,7 +1,8 @@
 
 function Card(props) { 
 
-const {title, description} = props;
+// eslint-disable-next-line react/prop-types
+const {title, description} = props; 
   return (
     
     <article className="card">
@@ -10,7 +11,7 @@ const {title, description} = props;
         </header>
         <img src="todo.png" alt="To DO List" className="thumbnail" />
         <div className="content">
-          <p> {props.description} </p>
+          <p> {description} </p>
         </div>
     </article>
 
