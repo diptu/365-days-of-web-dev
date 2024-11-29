@@ -7,11 +7,18 @@ type TodoProps = {
   description: string
 }
 const Todo = (props:TodoProps) => {
+  const {  title , description} = props.todo
   return (
-    <div>
-      <h3>Title : {props.todo.title}</h3>
-      <p>Description : {props.todo.description}</p>
+    <article>
+        <div>
+      <h3>Title : {title}</h3>
+      <p>Description : {description}</p>
     </div>
+    <button>
+    <i className="fa-solid fa-trash"></i>
+    </button>
+    </article>
+    
   )
 }
 

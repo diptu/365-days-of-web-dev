@@ -1,5 +1,5 @@
 import TodoList from "./components/TodoList"
-
+import 'font-awesome/css/font-awesome.min.css';
 const sample = [
   {
   id: 1,
