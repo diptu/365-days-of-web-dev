@@ -15,7 +15,7 @@ const Todo = (props:TodoProps) => {
       <p>Description : {description}</p>
     </div>
     <button>
-    <i className="fa-solid fa-trash"></i>
+    <i className="bi bi-trash"></i>
     </button>
     </article>
     

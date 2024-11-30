@@ -1,5 +1,8 @@
 import TodoList from "./components/TodoList"
-import 'font-awesome/css/font-awesome.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "font-awesome/css/font-awesome.min.css";
+import style from "./style.css";
+import NewTodo from "./components/NewTodo";
 const sample = [
   {
   id: 1,
@@ -22,7 +25,9 @@ function App() {
  
 
   return (
-    <div>
+    <div className="container">
+      <h1>TODO APP</h1>
+      <NewTodo />
       <TodoList todos={sample} />
      
     </div>
