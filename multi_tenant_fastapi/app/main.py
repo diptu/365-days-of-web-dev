@@ -1,13 +1,55 @@
-from fastapi import FastAPI
-from app.routers.tenant import router as tenant_router
-from app.database import engine
+from fastapi import FastAPI, Depends, Query
+from sqlalchemy.orm import Session
+from .db import SessionLocal
+from .tenancy.middleware import TenantMiddleware
+from .tenancy.service import create_tenant
+from .models.shared import User, Note
 
-from app.tenant_a.models import Base as TenantABase
-from app.tenant_b.models import Base as TenantBBase
+app = FastAPI(title="Multi-tenant FastAPI (schema-per-tenant)")
 
-# Create tables for known tenants (you can do this per-tenant on demand too)
-TenantABase.metadata.create_all(bind=engine)
-TenantBBase.metadata.create_all(bind=engine)
+# In dev: set root_domain=None and use X-Tenant header
+app.add_middleware(TenantMiddleware, root_domain=None, default="public")
 
-app = FastAPI(title="FastAPI Multitenancy (schemas)")
-app.include_router(tenant_router)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.post("/tenants/{name}")
+def api_create_tenant(name: str):
+    create_tenant(name)
+    return {"ok": True, "tenant": name}
+
+
+@app.post("/users")
+def create_user(
+    email: str = Query(...),
+    db: Session = Depends(get_db),
+):
+    u = User(email=email)
+    db.add(u)
+    db.commit()
+    db.refresh(u)
+    return u
+
+
+@app.post("/notes")
+def create_note(
+    title: str = Query(...),
+    body: str | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    n = Note(title=title, body=body)
+    db.add(n)
+    db.commit()
+    db.refresh(n)
+    return n
+
+
+@app.get("/notes")
+def list_notes(db: Session = Depends(get_db)):
+    return db.query(Note).all()
