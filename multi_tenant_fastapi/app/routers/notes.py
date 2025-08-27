@@ -1,8 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
+
 from ..db import SessionLocal
-from ..models.shared import Note
+from ..models.shared import Note, Outlet
 from ..schemas.note import NoteCreate, NoteOut
+from ..tenancy.context import get_current_outlet
 
 router = APIRouter(prefix="/notes", tags=["notes"])
 
@@ -15,40 +19,16 @@ def get_db():
         db.close()
 
 
-@router.post("", response_model=NoteOut, status_code=status.HTTP_201_CREATED)
-def create_note(
-    payload: NoteCreate,
-    db: Session = Depends(get_db),
-):
-    note = Note(title=payload.title, body=payload.body)
-    db.add(note)
-    db.commit()
-    db.refresh(note)
-    return note
+Limit = Annotated[int, Query(ge=1, le=100)]
+Offset = Annotated[int, Query(ge=0)]
+Db = Annotated[Session, Depends(get_db)]  # alias
 
 
 @router.get("", response_model=list[NoteOut])
 def list_notes(
-    limit: int = Query(20, ge=1, le=100),
-    offset: int = Query(0, ge=0),
-    db: Session = Depends(get_db),
-):
-    q = db.query(Note).order_by(Note.id).limit(limit).offset(offset)
-    return q.all()
-
-
-@router.get("/{note_id}", response_model=NoteOut)
-def get_note(note_id: int, db: Session = Depends(get_db)):
-    note = db.get(Note, note_id)
-    if not note:
-        raise HTTPException(status_code=404, detail="Note not found.")
-    return note
-
-
-@router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_note(note_id: int, db: Session = Depends(get_db)):
-    note = db.get(Note, note_id)
-    if not note:
-        return
-    db.delete(note)
-    db.commit()
+    db: Db,  # non-default first
+    limit: Limit = 20,  # then defaults
+    offset: Offset = 0,
+) -> list[NoteOut]:
+    stmt = select(Note).order_by(Note.id).limit(limit).offset(offset)
+    return db.execute(stmt).scalars().all()

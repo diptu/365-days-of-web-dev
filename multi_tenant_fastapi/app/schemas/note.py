@@ -1,10 +1,13 @@
-from pydantic import BaseModel, Field
+# app/schemas/note.py
+from __future__ import annotations
+
+from pydantic import BaseModel, Field, ConfigDict
 from .common import CreatedAt
 
 
 class NoteCreate(BaseModel):
-    title: str = Field(min_length=1, max_length=255)
-    body: str | None = None
+    title: str = Field(..., min_length=1, max_length=255, description="Note title")
+    body: str | None = Field(default=None, description="Optional note body")
 
 
 class NoteOut(CreatedAt):
@@ -12,5 +15,5 @@ class NoteOut(CreatedAt):
     title: str
     body: str | None = None
 
-    class Config:
-        from_attributes = True  # SQLAlchemy -> Pydantic
+    # Pydantic v2: enable ORM mode for SQLAlchemy instances
+    model_config = ConfigDict(from_attributes=True)
