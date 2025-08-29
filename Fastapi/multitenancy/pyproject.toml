@@ -1,0 +1,16 @@
+[project]
+name = "multitenancy"
+version = "0.1.0"
+description = "multitenancy micro-service"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "psycopg2>=2.9.10",
+    "pydantic-settings>=2.10.1",
+    "sqlalchemy>=2.0.43",
+]
+
+
+[tool.black]
+line-length = 88
