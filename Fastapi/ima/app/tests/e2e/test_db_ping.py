@@ -1,13 +1,16 @@
-import pytest
+# app/tests/e2e/test_db_ping.py
 import httpx
+import pytest
+
 from app import app
 
 
 @pytest.mark.asyncio
-async def test_db_ping(monkeypatch):
-    # If DB isn’t running, this will fail — that’s expected.
-    transport = httpx.ASGITransport(app=app)
-    async with httpx.AsyncClient(transport=transport, base_url="http://test") as ac:
-        r = await ac.get("/v1/db-ping")
-        assert r.status_code == 200
-        assert r.json() == {"db": True}
+async def test_db_ping_ok():
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app),
+        base_url="http://testserver",
+    ) as client:
+        res = await client.get("/v1/db-ping")
+        assert res.status_code == 200
+        assert res.json() == {"status": "ok"}

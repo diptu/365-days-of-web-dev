@@ -1,13 +1,21 @@
-from fastapi import APIRouter, Request, HTTPException, status
+# app/v1/routers/whoami.py
+from __future__ import annotations
 
-router = APIRouter()
+from typing import Optional
+
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
+from app.api.dependencies import get_org_context
 
 
-@router.get("/whoami")
-async def whoami(request: Request):
-    org_id = getattr(request.state, "org_id", None)
-    if not org_id:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Missing X-Org-ID"
-        )
-    return {"org_id": org_id}
+class WhoAmI(BaseModel):
+    org_id: Optional[str] = None
+
+
+router = APIRouter(tags=["whoami"])
+
+
+@router.get("/v1/whoami", response_model=WhoAmI)
+async def whoami(ctx: dict = Depends(get_org_context)) -> WhoAmI:
+    return WhoAmI(org_id=ctx["org_id"])

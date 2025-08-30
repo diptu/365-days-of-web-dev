@@ -34,6 +34,7 @@ It is being developed incrementally in **small, testable slices**. Each step is 
 ### 5. Global Models: `User`, `Organization` (create org)
 - Planned: Add global `User` + `Organization` models.
 - Planned: `POST /orgs` endpoint → create new organization.
+- Planned: `POST /users` endpoint → create new user.
 - Planned: DB migrations for global schema.
 
 ### 6. Per-Tenant Schema on Org Creation
@@ -56,6 +57,7 @@ It is being developed incrementally in **small, testable slices**. Each step is 
 - Planned: Guards (`require_role`) dependency for endpoints.
 - Planned: Owner has full org-wide access; strict org isolation.
 
+### Docarize and host in AWS/AZURE
 ---
 
 ## Core Goals
@@ -69,6 +71,6 @@ It is being developed incrementally in **small, testable slices**. Each step is 
 
 ## Progress Status
 
-- ✅ Step 1-4 completed.
-- 🚧 Step 5 in progress.
-- ⏳ Steps 6–9 planned.
+- ✅ Step 1-5 completed.
+- 🚧 Step 6 in progress.
+- ⏳ Steps 7–10 planned.
