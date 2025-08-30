@@ -1,8 +1,8 @@
-"""add users & organizations
+"""0001_initial_public
 
-Revision ID: 401a571dece3
-Revises: f21c8279e777
-Create Date: 2025-08-30 15:34:21.049361
+Revision ID: f422da8f92aa
+Revises: 
+Create Date: 2025-08-31 02:09:38.503312
 
 """
 from __future__ import annotations
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '401a571dece3'
-down_revision = 'f21c8279e777'
+revision = 'f422da8f92aa'
+down_revision = None
 branch_labels = None
 depends_on = None
 

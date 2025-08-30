@@ -7,6 +7,3 @@ class Base(DeclarativeBase):
     """Global SQLAlchemy declarative base."""
 
     pass
-
-
-# Alembic will import model modules in env.py so autogenerate sees them.

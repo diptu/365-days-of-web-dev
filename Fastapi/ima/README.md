@@ -71,6 +71,6 @@ It is being developed incrementally in **small, testable slices**. Each step is 
 
 ## Progress Status
 
-- ✅ Step 1-5 completed.
-- 🚧 Step 6 in progress.
-- ⏳ Steps 7–10 planned.
+- ✅ Step 1-7 completed.
+- 🚧 Step 8 in progress.
+- ⏳ Steps 9–10 planned.

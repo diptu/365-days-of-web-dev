@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db.session import get_db
 from app.domain.org.schemas import OrgCreate, OrgOut
 from app.domain.org.repo import get_org_by_slug, create_org
+from app.core.db.tenancy import ensure_schema_for_org  # ✅
 
 router = APIRouter(tags=["orgs"])
 
@@ -17,5 +18,10 @@ async def create_organization(
 ) -> OrgOut:
     if await get_org_by_slug(db, payload.slug):
         raise HTTPException(status_code=409, detail="slug_already_exists")
+
     org = await create_org(db, name=payload.name, slug=payload.slug)
+
+    # ✅ Create per-tenant schema right after org row exists (same tx)
+    await ensure_schema_for_org(db, org.slug)
+
     return OrgOut.model_validate(org)
